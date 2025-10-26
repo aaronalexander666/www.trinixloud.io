@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon AI - Caribbean's Most Affordable AI Solution</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ff88;
+            --secondary: #667eea;
+            --accent: #ff4757;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Glass Card Effect */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: var(--gradient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--glass);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .price-card {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .price-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+        }
+
+        .price-card.winner {
+            border: 2px solid var(--primary);
+            transform: scale(1.05);
+        }
+
+        .price-display {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li.check::before {
+            content: '✅';
+            margin-right: 0.5rem;
+        }
+
+        .savings-badge {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Calculator Section */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .calculator-inputs {
+            space-y: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .range-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1rem;
+            height: 300px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 100%;
+        }
+
+        /* Receipt Display */
+        .receipt-display {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .receipt-row.total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .receipt-row.saving {
+            color: var(--accent);
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Guarantee Section */
+        .guarantee-section {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(102, 126, 234, 0.1));
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .guarantee-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .calc-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        select option {
+            background: var(--dark);
+            color: var(--light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-up">
+                <h1>🐉 Dragon AI</h1>
+                <p>Caribbean's Most Affordable AI Solution</p>
+                <p style="font-size: 1.2rem; opacity: 0.8;">
+                    Pay TTD <strong>$0.01</strong> per 1,000 tokens • 300× cheaper than GPT-4
+                </p>
+                
+                <div class="stats-grid" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-card">
+                        <span class="stat-number counter" data-target="0.01">0</span>
+                        <div class="stat-label">TTD per 1K tokens</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number counter" data-target="25000">0</span>
+                        <div class="stat-label">Avg Annual Savings (TTD)</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number counter" data-target="300">0</span>
+                        <div class="stat-label">× Cheaper vs GPT-4</div>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/18687777636?text=Hi! I want the TTD $50 Starter Pack. Please send Republic Bank details."
+                   class="cta-button pulse" target="_blank">
+                    💬 Get Started (TTD $50)
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="container">
+        <div class="glass-card" data-aos="fade-up">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">
+                💰 Transparent TTD Pricing
+            </h2>
+            
+            <div class="pricing-grid">
+                <!-- Starter Pack -->
+                <div class="price-card winner">
+                    <div class="price-display">TTD $50</div>
+                    <div style="opacity: 0.8; margin-bottom: 2rem; font-size: 1.1rem; text-align: center;">
+                        5,000 tokens • ≈ 5,000 AI questions
+                    </div>
+                    <ul class="feature-list">
+                        <li class="check">Kimi-powered intelligence</li>
+                        <li class="check">WhatsApp onboarding</li>
+                        <li class="check">TTD billing (no USD)</li>
+                        <li class="check">30-day 10× money-back guarantee</li>
+                    </ul>
+                    <div class="savings-badge">🚀 STARTER PACK</div>
+                </div>
+
+                <!-- Business Pro -->
+                <div class="price-card">
+                    <div class="price-display">TTD $100</div>
+                    <div style="opacity: 0.8; margin-bottom: 2rem; font-size: 1.1rem; text-align: center;">
+                        10,000 tokens • ≈ 10,000 AI questions
+                    </div>
+                    <ul class="feature-list">
+                        <li class="check">Everything in Starter</li>
+                        <li class="check">Priority support</li>
+                        <li class="check">Business analytics</li>
+                        <li class="check">Custom integrations</li>
+                    </ul>
+                    <div class="savings-badge">💼 BUSINESS PRO</div>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="price-card">
+                    <div class="price-display">TTD $500</div>
+                    <div style="opacity: 0.8; margin-bottom: 2rem; font-size: 1.1rem; text-align: center;">
+                        50,000 tokens • priority support
+                    </div>
+                    <ul class="feature-list">
+                        <li class="check">Everything in Business Pro</li>
+                        <li class="check">Dedicated account manager</li>
+                        <li class="check">Custom AI models</li>
+                        <li class="check">White-label options</li>
+                    </ul>
+                    <div class="savings-badge">🏢 ENTERPRISE</div>
+                </div>
+
+                <!-- Unlimited -->
+                <div class="price-card">
+                    <div class="price-display">TTD $1,000</div>
+                    <div style="opacity: 0.8; margin-bottom: 2rem; font-size: 1.1rem; text-align: center;">
+                        100,000 tokens • white-label API
+                    </div>
+                    <ul class="feature-list">
+                        <li class="check">Everything in Enterprise</li>
+                        <li class="check">Unlimited API calls</li>
+                        <li class="check">Full white-label rights</li>
+                        <li class="check">24/7 technical support</li>
+                    </ul>
+                    <div class="savings-badge">🚀 UNLIMITED</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Calculator -->
+    <section class="container">
+        <div class="glass-card" data-aos="fade-up">
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">🔍 What You Pay For - Token-by-Token</h2>
+            <p style="text-align:center;opacity:.8; margin-bottom: 2rem;">
+                1 token ≈ 0.75 words • All prices in TTD • Transparent cost breakdown
+            </p>
+
+            <div class="calc-grid">
+                <div class="calculator-inputs">
+                    <div class="input-group">
+                        <label>📈 Monthly AI Questions</label>
+                        <input type="range" id="questions" class="range-slider" min="100" max="100000" value="2000" step="100">
+                        <div class="range-labels">
+                            <span>100</span>
+                            <span id="q-value">2,000</span>
+                            <span>100K</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>🔤 Avg Tokens per Question</label>
+                        <input type="range" id="tokens" class="range-slider" min="100" max="2000" value="150" step="10">
+                        <div class="range-labels">
+                            <span>100</span>
+                            <span id="t-value">150</span>
+                            <span>2K</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>🏢 Business Type</label>
+                        <select id="biz-type">
+                            <option value="light">Light usage (simple queries)</option>
+                            <option value="normal" selected>Normal usage (standard business)</option>
+                            <option value="heavy">Heavy usage (complex analysis)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="costChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt Card -->
+            <div class="receipt-display" id="receipt">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">🧾 Your Exact Monthly Receipt</h3>
+                <div class="receipt-row">
+                    <span>Total tokens used</span>
+                    <span id="token-count">300,000</span>
+                </div>
+                <div class="receipt-row">
+                    <span>Dragon AI cost (TTD $0.01/K)</span>
+                    <span id="dragon-cost">$3.00</span>
+                </div>
+                <div class="receipt-row saving">
+                    <span>You would pay with GPT-4</span>
+                    <span id="gpt4-cost">$492.00</span>
+                </div>
+                <div class="receipt-row total">
+                    <span>Total you pay</span>
+                    <span id="total-cost">$3.00</span>
+                </div>
+                <div class="savings-badge" style="margin-top: 1rem;">
+                    💰 You save <strong id="save-amount">$489.00</strong> every month
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guarantee Section -->
+    <section class="container">
+        <div class="guarantee-section" data-aos="fade-up">
+            <h2>🛡️ 10× Money-Back Guarantee</h2>
+            <p style="font-size: 1.2rem; margin: 1rem 0;">
+                Pay TTD $50 → Don't save <strong>TTD $500+</strong> in 30 days → 
+                Full TTD $50 refund via Republic Bank transfer.
+            </p>
+            <p style="opacity: 0.8;">
+                No forms, no tickets—just WhatsApp us the receipt.
+            </p>
+            
+            <a href="https://wa.me/18687777636?text=Hi! I want the TTD $50 Starter Pack. Please send Republic Bank details."
+               class="cta-button pulse" target="_blank">
+                💬 Get Starter Pack (TTD $50)
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / 200;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(() => animateCounters(), 10);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        // Start counter animation when page loads
+        setTimeout(animateCounters, 1000);
+
+        // Calculator logic
+        const USD_TO_TTD = 6.78;
+        const DRAGON_RATE_PER_1K = 0.01; // TTD $0.01 per 1K tokens
+        const GPT4_RATE_PER_1K = 0.41;   // TTD $0.41 per 1K tokens (approx)
+
+        function updateCalculator() {
+            const questions = parseInt(document.getElementById('questions').value);
+            const tokensPerQ = parseInt(document.getElementById('tokens').value);
+            const bizType = document.getElementById('biz-type').value;
+
+            // Update display values
+            document.getElementById('q-value').textContent = questions.toLocaleString();
+            document.getElementById('t-value').textContent = tokensPerQ.toLocaleString();
+
+            // Calculate total tokens
+            const totalTokens = questions * tokensPerQ;
+            
+            // Apply business type multiplier
+            const multipliers = { light: 0.8, normal: 1.0, heavy: 1.3 };
+            const adjustedTokens = totalTokens * multipliers[bizType];
+
+            // Calculate costs
+            const dragonCost = (adjustedTokens / 1000) * DRAGON_RATE_PER_1K;
+            const gpt4Cost = (adjustedTokens / 1000) * GPT4_RATE_PER_1K;
+            const savings = gpt4Cost - dragonCost;
+
+            // Update receipt
+            document.getElementById('token-count').textContent = Math.round(adjustedTokens).toLocaleString();
+            document.getElementById('dragon-cost').textContent = '$' + dragonCost.toFixed(2);
+            document.getElementById('gpt4-cost').textContent = '$' + gpt4Cost.toFixed(2);
+            document.getElementById('total-cost').textContent = '$' + dragonCost.toFixed(2);
+            document.getElementById('save-amount').textContent = '$' + savings.toFixed(2);
+
+            // Update chart
+            updateChart(dragonCost, gpt4Cost);
+        }
+
+        function updateChart(dragonCost, gpt4Cost) {
+            const ctx = document.getElementById('costChart').getContext('2d');
+            
+            if (window.costChart) {
+                window.costChart.destroy();
+            }
+
+            window.costChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Dragon AI', 'GPT-4'],
+                    datasets: [{
+                        label: 'Monthly Cost (TTD)',
+                        data: [dragonCost, gpt4Cost],
+                        backgroundColor: ['#00ff88', '#ff4757'],
+                        borderRadius: 10,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(2);
+                                },
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Wire up calculator inputs
+        ['questions', 'tokens', 'biz-type'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateCalculator);
+        });
+
+        // Initialize calculator
+        updateCalculator();
+    </script>
+</body>
+</html>
